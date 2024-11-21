@@ -1,101 +1,110 @@
-import Image from "next/image";
+"use client";
+import { useState, useCallback, useEffect, useRef } from "react";
 
-export default function Home() {
+export default function App() {
+  const [length, setLength] = useState(8);
+  const [numberAllowed, setNumberAllowed] = useState(false);
+  const [charAllowed, setCharAllowed] = useState(false);
+  const [password, setPassword] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  const passRef = useRef(null);
+
+  const passwordGenerator = useCallback(() => {
+    let pass = "";
+    let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    if (numberAllowed) str += "0123456789";
+    if (charAllowed) str += "!@#$%^&*()_+=-{}[]|:;<>,.?/~`";
+
+    for (let i = 0; i < length; i++) {
+      const char = str[Math.floor(Math.random() * str.length)];
+      pass += char;
+    }
+    setPassword(pass);
+  }, [length, numberAllowed, charAllowed]);
+
+  const copyClipboard = useCallback(() => {
+    try {
+      passRef.current?.select();
+      passRef.current?.setSelectionRange(0, 999);
+      navigator.clipboard.writeText(password);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      console.error("Failed to copy text: ", error);
+    }
+  }, [password]);
+
+  useEffect(() => {
+    passwordGenerator();
+  }, [length, numberAllowed, charAllowed]);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="flex justify-center items-center w-screen h-screen bg-gray-800">
+      <div className="w-[600px] h-auto bg-gray-700 rounded-lg shadow-lg">
+        <div className="p-5 w-full">
+          <input
+            className="rounded-bl-lg rounded-tl-lg w-[80%] py-3 px-5 text-gray-900 bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            type="text"
+            placeholder="password"
+            readOnly
+            value={password}
+            ref={passRef}
+          />
+          <button
+            onClick={copyClipboard}
+            className={`rounded-br-lg rounded-tr-lg py-3 px-5 text-white transition-all ${
+              copied
+                ? "bg-green-500 hover:bg-green-600"
+                : "bg-blue-600 hover:bg-blue-700"
+            }`}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            {copied ? "Copied!" : "Copy"}
+          </button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        <div className="w-full px-8 py-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <input
+                className="w-[150px] h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
+                type="range"
+                min="6"
+                max="100"
+                value={length}
+                onChange={(e) => setLength(Number(e.target.value))}
+              />
+              <label className="text-white text-sm font-medium">{length}</label>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <input
+                className="w-6 h-6 accent-blue-600 cursor-pointer"
+                type="checkbox"
+                checked={numberAllowed}
+                onChange={() => setNumberAllowed((prev) => !prev)}
+              />
+              <label className="text-white text-sm font-medium">
+                Include Numbers
+              </label>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <input
+                className="w-6 h-6 accent-blue-600 cursor-pointer"
+                type="checkbox"
+                checked={charAllowed}
+                onChange={() => setCharAllowed((prev) => !prev)}
+              />
+              <label className="text-white text-sm font-medium">
+                Include Characters
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
