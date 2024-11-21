@@ -25,8 +25,6 @@ export default function App() {
 
   const copyClipboard = useCallback(() => {
     try {
-      passRef.current?.select();
-      passRef.current?.setSelectionRange(0, 999);
       navigator.clipboard.writeText(password);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -37,10 +35,11 @@ export default function App() {
 
   useEffect(() => {
     passwordGenerator();
-  }, [length, numberAllowed, charAllowed]);
+  }, [length, numberAllowed, charAllowed,setPassword]);
 
   return (
-    <div className="flex justify-center items-center w-screen h-screen bg-gray-800">
+    <div className="flex flex-col gap-5 justify-center items-center w-screen h-screen bg-gray-800">
+      <h1 className="text-white text-4xl"> 𝐏𝐚𝐬𝐬𝐰𝐨𝐫𝐝 𝐆𝐞𝐧𝐞𝐫𝐚𝐭𝐨𝐫 🔑</h1>
       <div className="w-[600px] h-auto bg-gray-700 rounded-lg shadow-lg">
         <div className="p-5 w-full">
           <input
