@@ -35,15 +35,17 @@ export default function App() {
 
   useEffect(() => {
     passwordGenerator();
-  }, [length, numberAllowed, charAllowed,setPassword]);
+  }, [length, numberAllowed, charAllowed, setPassword]);
 
   return (
-    <div className="flex flex-col gap-5 justify-center items-center w-screen h-screen bg-gray-800">
-      <h1 className="text-white text-4xl"> 𝐏𝐚𝐬𝐬𝐰𝐨𝐫𝐝 𝐆𝐞𝐧𝐞𝐫𝐚𝐭𝐨𝐫 🔑</h1>
-      <div className="w-[600px] h-auto bg-gray-700 rounded-lg shadow-lg">
-        <div className="p-5 w-full">
+    <div className="flex flex-col gap-5 justify-center items-center w-screen min-h-screen bg-gray-800 p-4">
+      <h1 className="text-white text-2xl md:text-4xl text-center">
+        𝐏𝐚𝐬𝐬𝐰𝐨𝐫𝐝 𝐆𝐞𝐧𝐞𝐫𝐚𝐭𝐨𝐫 🔑
+      </h1>
+      <div className="w-full max-w-lg bg-gray-700 rounded-lg shadow-lg">
+        <div className="p-4 w-full flex flex-col sm:flex-row items-center gap-2">
           <input
-            className="rounded-bl-lg rounded-tl-lg w-[80%] py-3 px-5 text-gray-900 bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-[80%] flex-grow rounded-lg py-3 px-4 text-gray-900 bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
             type="text"
             placeholder="password"
             readOnly
@@ -52,7 +54,7 @@ export default function App() {
           />
           <button
             onClick={copyClipboard}
-            className={`rounded-br-lg rounded-tr-lg py-3 px-5 text-white transition-all ${
+            className={`rounded-lg py-3 px-5 text-white transition-all ${
               copied
                 ? "bg-green-500 hover:bg-green-600"
                 : "bg-blue-600 hover:bg-blue-700"
@@ -62,22 +64,22 @@ export default function App() {
           </button>
         </div>
 
-        <div className="w-full px-8 py-4 space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <input
-                className="w-[150px] h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
-                type="range"
-                min="6"
-                max="100"
-                value={length}
-                onChange={(e) => setLength(Number(e.target.value))}
-              />
-              <label className="text-white text-sm font-medium">{length}</label>
-            </div>
+        <div className="w-full px-4 py-4 space-y-4">
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <input
+              className="w-full sm:w-[150px] h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
+              type="range"
+              min="6"
+              max="100"
+              value={length}
+              onChange={(e) => setLength(Number(e.target.value))}
+            />
+            <label className="text-white text-sm font-medium">
+              Length: {length}
+            </label>
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <input
                 className="w-6 h-6 accent-blue-600 cursor-pointer"
